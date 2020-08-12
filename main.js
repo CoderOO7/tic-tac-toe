@@ -40,4 +40,42 @@ const gameBoard = (function() {
         update
     };
 
-})();
+})();
+
+
+const displayController = (function(doc) {
+
+    const board = doc.getElementById('board');
+    const boardCells = Array.from(board.children);
+
+    /**
+     * Remove all child nodes from a gameboard cell element.
+     * @param {Object} cell - A gameboard cell element on the webpage.
+     */
+    function _removeChildren(cell) {
+        while (cell.firstChild) {
+            cell.removeChild(cell.firstChild);
+        }
+    }
+
+    /**
+     * Display the game board's contents on the webpage.
+     */
+    function render() {
+        const gameBoardArray = gameBoard.get();
+        boardCells.forEach((cell, index) => {
+            // Check that index is in range of the board's array.
+            if (gameBoard.hasCell(index)) {
+                _removeChildren(cell);
+                cell.insertAdjacentHTML('beforeend', gameBoardArray[index]);
+            }
+        });
+    }
+
+    return {
+        board,
+        render
+    };
+
+})(document);
+
