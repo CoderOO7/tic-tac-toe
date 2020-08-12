@@ -1,0 +1,44 @@
+// VARIABLES
+$num-board-col: 3;
+$num-board-row: 3;
+$cell-size: 9rem;
+
+// MIXINS
+@mixin set-grid-areas() {
+    $counter: 1;
+    @for $row from 1 through $num-board-row {
+        @for $col from 1 through $num-board-col {
+            [data-cell-number="#{$counter}"] {
+                grid-column: $col;
+                grid-row: $row;
+            }
+            $counter: $counter + 1;
+        }
+    }
+}
+
+body {
+    font-family: sans-serif;
+    font-size: 1.6rem;
+}
+
+.board {
+    @include set-grid-areas();
+    display: grid;
+    font-size: 5rem;
+    gap: .2rem;
+    // repeat() function not working with vender prefix compiled.
+    grid-template-columns: $cell-size $cell-size $cell-size;
+    grid-template-rows: $cell-size $cell-size $cell-size;
+    justify-content: center;
+
+    &__cell {
+        align-items: center;
+        background-color: #eee;
+        display: flex;
+        justify-content: center;
+        padding: .5rem .75rem;
+
+        &:hover { cursor: pointer; }
+    }
+}
