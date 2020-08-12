@@ -1,6 +1,17 @@
+
+const playerFactory = (name, marker, isMyTurn) => {
+    return {
+        name,
+        marker,
+        isMyTurn
+    };
+};
+
 const gameBoard = (function() {
 
-    const NUM_CELLS = 9;
+    // 3x3 tic-tac-toe board.
+    const DIMENSION = 3;
+    const NUM_CELLS = Math.pow(DIMENSION, 2);
     const boardArray = Array(NUM_CELLS).fill('');
     const get = () => boardArray;
 
@@ -28,8 +39,7 @@ const gameBoard = (function() {
      * @param {string} marker - Player's move, either 'X' or 'O'.
      */
     function update(index, marker) {
-        if (!hasCell(index)) return false;
-        if (!_isEmptyCell(index)) return false;
+        if (!hasCell(index) || !_isEmptyCell(index)) return false;
         boardArray[index] = marker;
         return true;
     }
@@ -82,27 +92,24 @@ const displayController = (function(doc) {
 
 const gameController = (function() {
 
-    const playerFactory = (name, marker, isMyTurn) => {
-        return {
-            name,
-            marker,
-            isMyTurn
-        };
-    };
-
     const playerOne = playerFactory('Player 1', 'X', true);
     const playerTwo = playerFactory('Player 2', 'O', false);
+    const boardElement = displayController.board;
 
     /**
-     * Return true if it is player's turn to play, else false.
+     * Return true if it is currently a player's turn, else false.
      * @param {Object} player - Player object to check.
      */
     function _isPlayerTurn(player) {
         return player.isMyTurn;
     }
 
+    function _getActivePlayer() {
+        return _isPlayerTurn(playerOne) ? playerOne : playerTwo;
+    }
+
     /**
-     * Switch player's turns based on the last player's turn.
+     * Switch player's turns based on which player last played.
      */
     function _changeTurns() {
         if (_isPlayerTurn(playerOne)) {
@@ -114,25 +121,47 @@ const gameController = (function() {
         }
     }
 
-    /**
-     * Update the gameboard based on a player's move.
-     * @param {Object} player - Player object who just played.
-     * @param {Object} cell   - A gameboard cell element on the webpage.
-     */
-    function _handlePlayerMove(player, cell) {
-        if (!cell) return;
-        const cellNumber = parseInt(cell.getAttribute('data-cell-number'));
+    function _isGameOver() {
+        const gameBoardArray = gameBoard.get();
+        // Gameboard must contain 3-in-a-row or be a tie.
+            // TODO: 1. Check 3-in-a-row.
+            // Any column/row/diagonal only contains one marker.
+            // TODO: 2. Check if game is tied.
+            // Gameboard contains no empty spots.
+    }
 
-        // Change player turns and update board if player's move was valid.
-        if (gameBoard.update(cellNumber - 1, player.marker)) {
+    /**
+     * Update the gameboard after a player makes their move.
+     * @param {Object} player       - Player object who just played.
+     * @param {Object} cellNumber   - Cell's index number in the gameboard.
+     */
+    function _executePlay(player, cellIndex) {
+        const wasUpdated = gameBoard.update(cellIndex, player.marker);
+        if (!wasUpdated) {
+            return;
+        } else if (_isGameOver()) {
+            // TODO: 1. Remove event listener for click events from board.
+            // TODO: 2. Enable 'Play Again' button.
+            // TODO: 3. Display congratulations message to winner.
+        } else {
             _changeTurns();
             displayController.render();
         }
     }
 
-    displayController.board.addEventListener('click', function(event) {
-        const player = (_isPlayerTurn(playerOne)) ? playerOne : playerTwo;
-        _handlePlayerMove(player, event.target.closest('.board__cell'));
-    });
+    /**
+     * Callback for `click` events on the gameboard.
+     * @param {Object} param0 - Contains target element clicked.
+     */
+    function _handleBoardClick({target}) {
+        const cellClicked = target.closest('board__cell');
+        if (cellClicked) {
+            const cellIndex = parseInt(cellClicked.dataset.cellNumber) - 1;
+            const activePlayer = _getActivePlayer();
+            _executePlay(activePlayer, cellIndex);
+        }
+    }
+
+    boardElement.addEventListener('click', _handleBoardClick, false);
 
 })();
