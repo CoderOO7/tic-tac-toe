@@ -78,4 +78,61 @@ const displayController = (function(doc) {
     };
 
 })(document);
-
+
+
+const gameController = (function() {
+
+    const playerFactory = (name, marker, isMyTurn) => {
+        return {
+            name,
+            marker,
+            isMyTurn
+        };
+    };
+
+    const playerOne = playerFactory('Player 1', 'X', true);
+    const playerTwo = playerFactory('Player 2', 'O', false);
+
+    /**
+     * Return true if it is player's turn to play, else false.
+     * @param {Object} player - Player object to check.
+     */
+    function _isPlayerTurn(player) {
+        return player.isMyTurn;
+    }
+
+    /**
+     * Switch player's turns based on the last player's turn.
+     */
+    function _changeTurns() {
+        if (_isPlayerTurn(playerOne)) {
+            playerOne.isMyTurn = false;
+            playerTwo.isMyTurn = true;
+        } else {
+            playerOne.isMyTurn = true;
+            playerTwo.isMyTurn = false;
+        }
+    }
+
+    /**
+     * Update the gameboard based on a player's move.
+     * @param {Object} player - Player object who just played.
+     * @param {Object} cell   - A gameboard cell element on the webpage.
+     */
+    function _handlePlayerMove(player, cell) {
+        if (!cell) return;
+        const cellNumber = parseInt(cell.getAttribute('data-cell-number'));
+
+        // Change player turns and update board if player's move was valid.
+        if (gameBoard.update(cellNumber - 1, player.marker)) {
+            _changeTurns();
+            displayController.render();
+        }
+    }
+
+    displayController.board.addEventListener('click', function(event) {
+        const player = (_isPlayerTurn(playerOne)) ? playerOne : playerTwo;
+        _handlePlayerMove(player, event.target.closest('.board__cell'));
+    });
+
+})();
