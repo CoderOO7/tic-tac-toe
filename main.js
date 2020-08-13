@@ -145,6 +145,7 @@ const gameController = (function() {
     const playerOne = playerFactory('Player 1', 'X', true);
     const playerTwo = playerFactory('Player 2', 'O', false);
     const boardElement = displayController.board;
+    let gameWinner;
 
     /**
      * Return true if it is currently a player's turn, else false.
@@ -175,15 +176,46 @@ const gameController = (function() {
     }
 
     /**
+     * Return true if a gameboard row has a player's marker, else false.
+     * @param {string} marker        - Player's marker, either 'X' or 'O'.
+     * @param {Object} adjacentItems - Nested arrays of rows in gameboard.
+     */
+    function _containsMarker(marker, adjacentItems) {
+        return adjacentItems.some(arr => arr.every(item => item === marker));
+    }
+
+    /**
+     * Return true if a player has won by filling a row, else false.
+     * @param {string} marker - Player's marker, either 'X' or 'O'.
+     */
+    function _isWinner(marker) {
+        if (_containsMarker(marker, gameBoard.getRows())) {
+            return true;
+        } else if (_containsMarker(marker, gameBoard.getColumns())) {
+            return true;
+        } else if (_containsMarker(marker, gameBoard.getDiagonals())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return true if a game winner is found, else false.
+     */
+    function _winnerFound() {
+        if (_isWinner(playerOne.marker)) {
+            gameWinner = playerOne;
+        } else if (_isWinner(playerTwo.marker)) {
+            gameWinner = playerTwo;
+        }
+        return (!!gameWinner);
+    }
+
+    /**
      * Return true if a player has won or a tie occurred, else false.
      */
     function _isGameOver() {
-        const gameBoardArray = gameBoard.get();
-        // Gameboard must contain 3-in-a-row or be a tie.
-            // TODO: 1. Check 3-in-a-row.
-            // Any column/row/diagonal only contains one marker.
-            // TODO: 2. Check if game is tied.
-            // Gameboard contains no empty spots.
+        return (_winnerFound() || gameBoard.isFilled());
     }
 
     /**
