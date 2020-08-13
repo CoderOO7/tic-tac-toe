@@ -24,6 +24,52 @@ const gameBoard = (function() {
     }
 
     /**
+     * Return true if the gameboard has no empty spots left, else false.
+     */
+    function isFilled() {
+        return boardArray.every((cell, index) => !_isEmptyCell(index));
+    }
+
+    /**
+     * Return an array with subarrays for each row in the gameboard.
+     */
+    function getRows() {
+        const boardArrayCopy = Array.from(boardArray);
+        const rowsArray = [];
+        while (boardArrayCopy.length) {
+            rowsArray.push(boardArrayCopy.splice(0, DIMENSION));
+        }
+        return rowsArray;
+    }
+
+    /**
+     * Return an array with subarrays for each column in the gameboard.
+     */
+    function getColumns() {
+        // Adds n empty arrays inside array.
+        const columnsArray = Array.from({length: DIMENSION}, () => []);
+        for (let i = 0; i < NUM_CELLS; i++) {
+            columnsArray[i % DIMENSION].push(boardArray[i]);
+        }
+        return columnsArray;
+    }
+
+    /**
+     * Return an array with subarrays for each diagonal in the gameboard.
+     */
+    function getDiagonals() {
+        const diagonalsArray = Array.from({length: 2}, () => []);
+        const rowsArray = getRows();
+        rowsArray.forEach((row, index) => {
+            // index gets bigger
+            diagonalsArray[0].push(row[index]);
+            // index gets smaller 
+            diagonalsArray[1].push(row[DIMENSION - 1 - index]);
+        });
+        return diagonalsArray;
+    }
+
+    /**
      * Return true if index is in range of this board, else false.
      * @param   {number}  cellIndex - Board cell index to validate.
      */
@@ -46,6 +92,10 @@ const gameBoard = (function() {
 
     return {
         get,
+        getRows,
+        getColumns,
+        getDiagonals,
+        isFilled,
         hasCell,
         update
     };
@@ -104,6 +154,9 @@ const gameController = (function() {
         return player.isMyTurn;
     }
 
+    /**
+     * Return the player object who just made their move.
+     */
     function _getActivePlayer() {
         return _isPlayerTurn(playerOne) ? playerOne : playerTwo;
     }
@@ -121,6 +174,9 @@ const gameController = (function() {
         }
     }
 
+    /**
+     * Return true if a player has won or a tie occurred, else false.
+     */
     function _isGameOver() {
         const gameBoardArray = gameBoard.get();
         // Gameboard must contain 3-in-a-row or be a tie.
@@ -133,19 +189,19 @@ const gameController = (function() {
     /**
      * Update the gameboard after a player makes their move.
      * @param {Object} player       - Player object who just played.
-     * @param {Object} cellNumber   - Cell's index number in the gameboard.
+     * @param {Object} cellIndex    - Cell's index number in the gameboard.
      */
     function _executePlay(player, cellIndex) {
         const wasUpdated = gameBoard.update(cellIndex, player.marker);
-        if (!wasUpdated) {
-            return;
-        } else if (_isGameOver()) {
-            // TODO: 1. Remove event listener for click events from board.
-            // TODO: 2. Enable 'Play Again' button.
-            // TODO: 3. Display congratulations message to winner.
-        } else {
-            _changeTurns();
+        if (wasUpdated) {
             displayController.render();
+            if (_isGameOver()) {
+                // TODO: 1. Remove event listener for click events from board.
+                // TODO: 2. Enable 'Play Again' button.
+                // TODO: 3. Display congratulations message to winner.
+            } else {
+                _changeTurns();
+            }
         }
     }
 
@@ -154,7 +210,7 @@ const gameController = (function() {
      * @param {Object} param0 - Contains target element clicked.
      */
     function _handleBoardClick({target}) {
-        const cellClicked = target.closest('board__cell');
+        const cellClicked = target.closest('.board__cell');
         if (cellClicked) {
             const cellIndex = parseInt(cellClicked.dataset.cellNumber) - 1;
             const activePlayer = _getActivePlayer();
