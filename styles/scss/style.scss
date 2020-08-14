@@ -22,6 +22,18 @@ body {
     font-size: 1.6rem;
 }
 
+fieldset { margin-bottom: 2rem; }
+
+legend {
+    font-size: 1.8rem;
+    margin-bottom: .75rem;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
 .board {
     @include set-grid-areas();
     display: grid;
@@ -30,7 +42,7 @@ body {
     // repeat() function not working with vender prefix compiled.
     grid-template-columns: $cell-size $cell-size $cell-size;
     grid-template-rows: $cell-size $cell-size $cell-size;
-    justify-content: center;
+    margin-right: 3rem;
 
     &__cell {
         align-items: center;
@@ -41,4 +53,36 @@ body {
 
         &:hover { cursor: pointer; }
     }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.opponent {
+    &__box {
+        display: inline-block;
+
+        &:not(:last-child) { margin-right: 1rem; }
+    }
+}
+
+.names {
+    &__label {
+        display: inline-block;
+        margin-right: 1rem;
+        width: 10rem;
+    }
+
+    &__box + &__box { margin-top: .5rem; }
+
+    &__input { width: 10rem; }
+}
+
+.play-btn {
+    align-self: flex-start;
+    padding: .75rem 1.5rem;
 }

@@ -3,6 +3,24 @@ body {
   font-size: 1.6rem;
 }
 
+fieldset {
+  margin-bottom: 2rem;
+}
+
+legend {
+  font-size: 1.8rem;
+  margin-bottom: .75rem;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
 .board {
   display: -ms-grid;
   display: grid;
@@ -12,9 +30,7 @@ body {
       grid-template-columns: 9rem 9rem 9rem;
   -ms-grid-rows: 9rem 9rem 9rem;
       grid-template-rows: 9rem 9rem 9rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  margin-right: 3rem;
 }
 
 .board [data-cell-number="1"] {
@@ -96,4 +112,46 @@ body {
 
 .board__cell:hover {
   cursor: pointer;
+}
+
+.form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 1.5rem;
+}
+
+.opponent__box {
+  display: inline-block;
+}
+
+.opponent__box:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.names__label {
+  display: inline-block;
+  margin-right: 1rem;
+  width: 10rem;
+}
+
+.names__box + .names__box {
+  margin-top: .5rem;
+}
+
+.names__input {
+  width: 10rem;
+}
+
+.play-btn {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  padding: .75rem 1.5rem;
 }
