@@ -282,6 +282,24 @@ const gameController = (function() {
     }
 
     /**
+     * Display the game winner and reset the game's settings.
+     */
+    function _endGame() {
+        // Assign playerOne and playerTwo variables 'null'.
+        playerOne = null;
+        playerTwo = null;
+        gameWinner = null;
+        // TODO: Display congratulations message to winner.
+
+        // Reset the gameSettings object.
+        displayController.resetGameSettings();
+        // Enable form inputs to start a new game.
+        displayController.toggleActiveInputs();
+        // Empty contents of the gameboard's array.
+        gameBoard.clear();
+    }
+
+    /**
      * Update the gameboard after a player makes their move.
      * @param {Object} player       - Player object who just played.
      * @param {Object} cellIndex    - Cell's index number in the gameboard.
@@ -291,9 +309,7 @@ const gameController = (function() {
         if (wasUpdated) {
             displayController.render();
             if (_isGameOver()) {
-                // TODO: 1. Remove event listener for click events from board.
-                // TODO: 2. Enable 'Play Again' button.
-                // TODO: 3. Display congratulations message to winner.
+                _endGame();
             } else {
                 _changeTurns();
             }
