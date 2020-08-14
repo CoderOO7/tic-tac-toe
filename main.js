@@ -204,9 +204,9 @@ const displayController = (function(doc) {
 
 const gameController = (function() {
 
-    const playerOne = playerFactory('Player 1', 'X', true);
-    const playerTwo = playerFactory('Player 2', 'O', false);
     const boardElement = displayController.board;
+    let playerOne;
+    let playerTwo;
     let gameWinner;
 
     /**
@@ -301,10 +301,34 @@ const gameController = (function() {
     }
 
     /**
+     * Assign player objects if the game settings have been created.
+     */
+    function _assignPlayers() {
+        const gameSettings = displayController.getGameSettings(); 
+        if (Object.keys(gameSettings).length) {
+            playerOne = playerFactory(gameSettings.playerOneName, 'X', true);
+            playerTwo = playerFactory(gameSettings.playerTwoName, 'O', false);
+        }
+    }
+
+    /**
+     * Return true if player Objects have been created, else false.
+     */
+    function _hasGameSettings() {
+        if (playerOne && playerTwo) {
+            return true;
+        } else {
+            _assignPlayers();
+            return (playerOne && playerTwo);
+        }
+    }
+
+    /**
      * Callback for `click` events on the gameboard.
      * @param {Object} param0 - Contains target element clicked.
      */
     function _handleBoardClick({target}) {
+        if (!_hasGameSettings()) return;
         const cellClicked = target.closest('.board__cell');
         if (cellClicked) {
             const cellIndex = parseInt(cellClicked.dataset.cellNumber) - 1;
@@ -313,14 +337,8 @@ const gameController = (function() {
         }
     }
 
-    const emptyGameBoard = () => {gameBoard.clear();};
-    const getGameBoard = () => gameBoard.get();
-
     boardElement.addEventListener('click', _handleBoardClick, false);
 
-    return {
-        emptyGameBoard,
-        getGameBoard
-    };
+    return { getGameBoard: () => gameBoard.get() };
 
 })();
