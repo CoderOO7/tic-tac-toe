@@ -90,6 +90,15 @@ const gameBoard = (function() {
         return true;
     }
 
+    /**
+     * Reset each of the board's items to empty strings.
+     */
+    function clear() {
+        for (let i = 0; i < boardArray.length; i++) {
+            boardArray[i] = '';
+        }
+    }
+
     return {
         get,
         getRows,
@@ -97,7 +106,8 @@ const gameBoard = (function() {
         getDiagonals,
         isFilled,
         hasCell,
-        update
+        update,
+        clear
     };
 
 })();
@@ -106,7 +116,6 @@ const gameBoard = (function() {
 const displayController = (function(doc) {
 
     const board = doc.getElementById('board');
-    const boardCells = Array.from(board.children);
 
     /**
      * Remove all child nodes from a gameboard cell element.
@@ -122,13 +131,11 @@ const displayController = (function(doc) {
      * Display the game board's contents on the webpage.
      */
     function render() {
-        const gameBoardArray = gameBoard.get();
+        const gameBoardArray = gameController.getGameBoard();
+        const boardCells = Array.from(board.children);
         boardCells.forEach((cell, index) => {
-            // Check that index is in range of the board's array.
-            if (gameBoard.hasCell(index)) {
-                _removeChildren(cell);
-                cell.insertAdjacentHTML('beforeend', gameBoardArray[index]);
-            }
+            _removeChildren(cell);
+            cell.insertAdjacentHTML('beforeend', gameBoardArray[index]);
         });
     }
 
@@ -151,9 +158,7 @@ const gameController = (function() {
      * Return true if it is currently a player's turn, else false.
      * @param {Object} player - Player object to check.
      */
-    function _isPlayerTurn(player) {
-        return player.isMyTurn;
-    }
+    const _isPlayerTurn = (player) => player.isMyTurn;
 
     /**
      * Return the player object who just made their move.
@@ -186,26 +191,29 @@ const gameController = (function() {
 
     /**
      * Return true if a player has won by filling a row, else false.
-     * @param {string} marker - Player's marker, either 'X' or 'O'.
+     * @param {string} marker      - Player's marker, either 'X' or 'O'.
+     * @param {Object} boardTuples - Object with board's rows/columns/diagonals.
      */
-    function _isWinner(marker) {
-        if (_containsMarker(marker, gameBoard.getRows())) {
-            return true;
-        } else if (_containsMarker(marker, gameBoard.getColumns())) {
-            return true;
-        } else if (_containsMarker(marker, gameBoard.getDiagonals())) {
-            return true;
-        }
-        return false;
+    function _isWinner(marker, boardTuples) {
+        return (
+            _containsMarker(marker, boardTuples.rows) ||
+            _containsMarker(marker, boardTuples.columns) ||
+            _containsMarker(marker, boardTuples.diagonals)
+        );
     }
 
     /**
      * Return true if a game winner is found, else false.
      */
     function _winnerFound() {
-        if (_isWinner(playerOne.marker)) {
+        const boardTuples = {
+            rows: gameBoard.getRows(),
+            columns: gameBoard.getColumns(),
+            diagonals: gameBoard.getDiagonals()
+        };
+        if (_isWinner(playerOne.marker, boardTuples)) {
             gameWinner = playerOne;
-        } else if (_isWinner(playerTwo.marker)) {
+        } else if (_isWinner(playerTwo.marker, boardTuples)) {
             gameWinner = playerTwo;
         }
         return (!!gameWinner);
@@ -250,6 +258,14 @@ const gameController = (function() {
         }
     }
 
+    const emptyGameBoard = () => {gameBoard.clear();};
+    const getGameBoard = () => gameBoard.get();
+
     boardElement.addEventListener('click', _handleBoardClick, false);
+
+    return {
+        emptyGameBoard,
+        getGameBoard
+    };
 
 })();
