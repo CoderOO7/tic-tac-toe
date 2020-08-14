@@ -116,6 +116,37 @@ const gameBoard = (function() {
 const displayController = (function(doc) {
 
     const board = doc.getElementById('board');
+    const nameInputOne = doc.getElementById('p1-name');
+    const nameInputTwo = doc.getElementById('p2-name');
+    const opponentInputOne = doc.getElementById('player');
+    const opponentInputTwo = doc.getElementById('computer');
+    const form = doc.querySelector('.form');
+    let gameSettings = {};
+
+    /**
+     * Assign the gameSettings object based on form submitted inputs.
+     */
+    function _setGameSettings() {
+        const opponent = (opponentInputOne.checked) ? 'player' : 'computer';
+        gameSettings.opponent = opponent;
+        gameSettings.playerOneName = nameInputOne.value;
+        gameSettings.playerTwoName = nameInputTwo.value;
+    }
+
+    /**
+     * Start a new game by resetting the gameboard, disabling the form and
+     * saving the form's input values.
+     * @param {Object} event - 'Submit' event causing the form's submission.
+     */
+    function _activateGame(event) {
+        event.preventDefault();
+        // Show the new gameboard
+        render();
+        // Disable the form's input values.
+        toggleActiveInputs();
+        // Save input values inside gameSettings object
+        _setGameSettings();
+    }
 
     /**
      * Remove all child nodes from a gameboard cell element.
@@ -125,6 +156,19 @@ const displayController = (function(doc) {
         while (cell.firstChild) {
             cell.removeChild(cell.firstChild);
         }
+    }
+
+    const getGameSettings = () => gameSettings;
+    const resetGameSettings = () => {gameSettings = {};};
+
+    /**
+     * Toggle the disabled state for each input in the form.
+     */
+    function toggleActiveInputs() {
+        const formInputs = Array.from(form.getElementsByTagName('input'));
+        formInputs.forEach(input => {
+            input.disabled = !(input.disabled);
+        });
     }
 
     /**
@@ -139,8 +183,19 @@ const displayController = (function(doc) {
         });
     }
 
+    (function() {
+        // Set initial values for player's names
+        nameInputOne.value = 'Player 1';
+        nameInputTwo.value = 'Player 2';
+        // Function called when form submitted.
+        form.addEventListener('submit', _activateGame, false);
+    })();
+
     return {
         board,
+        getGameSettings,
+        resetGameSettings,
+        toggleActiveInputs,
         render
     };
 
