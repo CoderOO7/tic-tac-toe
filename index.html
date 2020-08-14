@@ -10,16 +10,43 @@
 </head>
 <body>
     <h1>Tic-Tac-Toe Game</h1>
-    <div class="board" id="board">
-        <span class="board__cell" data-cell-number="1">&nbsp;</span>
-        <span class="board__cell" data-cell-number="2">&nbsp;</span>
-        <span class="board__cell" data-cell-number="3">&nbsp;</span>
-        <span class="board__cell" data-cell-number="4">&nbsp;</span>
-        <span class="board__cell" data-cell-number="5">&nbsp;</span>
-        <span class="board__cell" data-cell-number="6">&nbsp;</span>
-        <span class="board__cell" data-cell-number="7">&nbsp;</span>
-        <span class="board__cell" data-cell-number="8">&nbsp;</span>
-        <span class="board__cell" data-cell-number="9">&nbsp;</span>
+    <div class="container">
+        <div class="board" id="board">
+            <span class="board__cell" data-cell-number="1">&nbsp;</span>
+            <span class="board__cell" data-cell-number="2">&nbsp;</span>
+            <span class="board__cell" data-cell-number="3">&nbsp;</span>
+            <span class="board__cell" data-cell-number="4">&nbsp;</span>
+            <span class="board__cell" data-cell-number="5">&nbsp;</span>
+            <span class="board__cell" data-cell-number="6">&nbsp;</span>
+            <span class="board__cell" data-cell-number="7">&nbsp;</span>
+            <span class="board__cell" data-cell-number="8">&nbsp;</span>
+            <span class="board__cell" data-cell-number="9">&nbsp;</span>
+        </div>
+        <form action="" method="GET" class="form">
+            <fieldset class="opponent">
+                <legend class="opponent__legend">Opponent</legend>
+                <div class="opponent__box">
+                    <input type="radio" name="opponent" id="player" value="player" class="opponent__input" required checked>
+                    <label for="player" class="opponent__label">Player</label>
+                </div>
+                <div class="opponent__box">
+                    <input type="radio" name="opponent" id="computer" value="computer" class="opponent__input" required>
+                    <label for="computer" class="opponent__label">Computer</label>
+                </div>
+            </fieldset>
+            <fieldset class="names">
+                <legend class="names__legend">Player Names</legend>
+                <div class="names__box">
+                    <label for="p1-name" class="names__label">Player X</label>
+                    <input type="text" name="player-name" id="p1-name" minlength="1" class="names__input" required>
+                </div>
+                <div class="names__box">
+                    <label for="p2-name" class="names__label">Player O</label>
+                    <input type="text" name="player-name" id="p2-name" minlength="1" class="names__input" required>
+                </div>
+            </fieldset>
+            <input type="submit" value="Play Game" class="play-btn">
+        </form>
     </div>
     <script src="main.js" charset="utf-8"></script>
 </body>
