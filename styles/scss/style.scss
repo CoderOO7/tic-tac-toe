@@ -48,7 +48,7 @@ body {
 h1 {
     font: 400 4.5rem 'Kreon', serif;
     letter-spacing: .2rem;
-    margin: 3rem 0 4rem;
+    margin: 3rem 0;
     text-align: center;
     text-shadow: .5rem .3rem .2rem $color-primary;
 }
@@ -63,14 +63,14 @@ legend {
 }
 
 .container {
+    align-items: center;
     display: flex;
     justify-content: center;
-    margin-bottom: 3.5rem;
+    margin-bottom: 3rem;
 }
 
 .board {
     @include set-grid-areas();
-    align-self: center;
     background-color: $color-primary;
     border-radius: 1rem;
     color: $color-secondary;
@@ -187,6 +187,26 @@ legend {
     left: 50%;
     transform: translateX(-50%);
 
-    &--hide {display: none;}
-    &--show {display: inline-block;}
+    &--hide { display: none; }
+    &--show { display: inline-block; }
+}
+
+@media (max-width: 750px) {
+    html { font-size: 56.25%; }
+}
+
+@media (max-width: 675px) {
+
+    html { font-size: 50%; }
+
+    .container { flex-direction: column; }
+
+    .board {
+        margin-bottom: 4rem;
+        margin-right: 0;
+    }
+}
+
+@media (min-width: 1300px) {
+    html { font-size: 68.75%; }
 }
