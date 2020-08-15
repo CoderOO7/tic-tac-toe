@@ -11,7 +11,6 @@ $color-secondary: #0B132B;
 $color-black: #000;
 $color-white: #FFF;
 $color-grey: #D9D9D9;
-$color-grey-dark: #303336;
 
 // MIXINS
 
@@ -43,6 +42,7 @@ html {
 body {
     font-family: 'Palanquin', sans-serif;
     font-size: 1.8rem;
+    position: relative;
 }
 
 h1 {
@@ -73,7 +73,7 @@ legend {
     align-self: center;
     background-color: $color-primary;
     border-radius: 1rem;
-    color: $color-grey-dark;
+    color: $color-secondary;
     display: grid;
     font-size: $cell-size - 5rem;
     font-weight: 600;
@@ -104,7 +104,7 @@ legend {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 3rem;
+    padding: 2.5rem 3rem;
 }
 
 .opponent {
@@ -177,9 +177,16 @@ legend {
 }
 
 .game-output {
-    display: flex;
+    background-color: $color-primary;
     font-size: 2.4rem;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: .1rem;
-    justify-content: center;
+    padding: .5rem 1rem;
+    // Center horizontally.
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &--hide {display: none;}
+    &--show {display: inline-block;}
 }

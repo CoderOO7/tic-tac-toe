@@ -6,6 +6,7 @@ html {
 body {
   font-family: 'Palanquin', sans-serif;
   font-size: 1.8rem;
+  position: relative;
 }
 
 h1 {
@@ -42,7 +43,7 @@ legend {
       align-self: center;
   background-color: #303F9F;
   border-radius: 1rem;
-  color: #303336;
+  color: #0B132B;
   display: -ms-grid;
   display: grid;
   font-size: 7rem;
@@ -150,7 +151,7 @@ legend {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 3rem;
+  padding: 2.5rem 3rem;
 }
 
 .opponent__box {
@@ -241,13 +242,21 @@ legend {
 }
 
 .game-output {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  background-color: #303F9F;
   font-size: 2.4rem;
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: .1rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  padding: .5rem 1rem;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+.game-output--hide {
+  display: none;
+}
+
+.game-output--show {
+  display: inline-block;
 }

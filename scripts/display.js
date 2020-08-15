@@ -2,13 +2,17 @@ import {gameController} from './game.js';
 
 const displayController = (function(doc) {
 
+    const gameOutputStr = 'game-output';
+    const hideOutputStr = `${gameOutputStr}--hide`;
+    const showOutputStr = `${gameOutputStr}--show`;
+
     const board = doc.getElementById('board');
     const nameInputOne = doc.getElementById('p1-name');
     const nameInputTwo = doc.getElementById('p2-name');
     const opponentInputOne = doc.getElementById('player');
     const opponentInputTwo = doc.getElementById('computer');
     const form = doc.querySelector('.form');
-    const gameOutput = doc.querySelector('.game-output');
+    const gameOutput = doc.querySelector(`.${gameOutputStr}`);
     let gameSettings = {};
 
     /**
@@ -61,6 +65,8 @@ const displayController = (function(doc) {
     function _clearMessage() {
         _removeChildren(gameOutput);
         gameOutput.insertAdjacentHTML('beforeend', '&nbsp;');
+        gameOutput.classList.remove(showOutputStr);
+        gameOutput.classList.add(hideOutputStr);
     }
 
     /**
@@ -112,6 +118,8 @@ const displayController = (function(doc) {
     function showMessage(outputString) {
         _removeChildren(gameOutput);
         gameOutput.insertAdjacentText('beforeend', outputString);
+        gameOutput.classList.remove(hideOutputStr);
+        gameOutput.classList.add(showOutputStr);
     }
 
     (function() {
