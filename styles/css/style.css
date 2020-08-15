@@ -38,15 +38,22 @@ legend {
 }
 
 .board {
+  -ms-grid-row-align: center;
+      align-self: center;
+  background-color: #303F9F;
+  border-radius: 1rem;
+  color: #303336;
   display: -ms-grid;
   display: grid;
-  font-size: 5rem;
-  gap: .2rem;
-  -ms-grid-columns: 9rem 9rem 9rem;
-      grid-template-columns: 9rem 9rem 9rem;
-  -ms-grid-rows: 9rem 9rem 9rem;
-      grid-template-rows: 9rem 9rem 9rem;
+  font-size: 7rem;
+  font-weight: 600;
+  gap: .75rem;
+  -ms-grid-columns: 12rem 12rem 12rem;
+      grid-template-columns: 12rem 12rem 12rem;
+  -ms-grid-rows: 12rem 12rem 12rem;
+      grid-template-rows: 12rem 12rem 12rem;
   margin-right: 3rem;
+  overflow: hidden;
 }
 
 .board [data-cell-number="1"] {
@@ -116,7 +123,7 @@ legend {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #eee;
+  background-color: #7986CB;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -127,10 +134,12 @@ legend {
 }
 
 .board__cell:hover {
+  background-color: #C5CAE9;
   cursor: pointer;
 }
 
 .form {
+  border: 0.05rem solid #303F9F;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -141,7 +150,7 @@ legend {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 1.5rem;
+  padding: 3rem;
 }
 
 .opponent__box {
@@ -170,4 +179,16 @@ legend {
   -ms-flex-item-align: start;
       align-self: flex-start;
   padding: .75rem 1.5rem;
+}
+
+.game-output {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 2.4rem;
+  font-weight: 300;
+  letter-spacing: .1rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }

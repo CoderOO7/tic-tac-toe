@@ -70,30 +70,41 @@ legend {
 
 .board {
     @include set-grid-areas();
+    align-self: center;
+    background-color: $color-primary;
+    border-radius: 1rem;
+    color: $color-grey-dark;
     display: grid;
-    font-size: 5rem;
-    gap: .2rem;
+    font-size: $cell-size - 5rem;
+    font-weight: 600;
+    gap: .75rem;
     // repeat() function not working with vender prefix compiled.
     grid-template-columns: $cell-size $cell-size $cell-size;
     grid-template-rows: $cell-size $cell-size $cell-size;
     margin-right: 3rem;
+    // Show rounded corners from border-radius.
+    overflow: hidden;
 
     &__cell {
         align-items: center;
-        background-color: #eee;
+        background-color: $color-primary-med;
         display: flex;
         justify-content: center;
         padding: .5rem .75rem;
 
-        &:hover { cursor: pointer; }
+        &:hover {
+            background-color: $color-primary-light;
+            cursor: pointer;
+        }
     }
 }
 
 .form {
+    border: .05rem solid $color-primary;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 3rem;
 }
 
 .opponent {
@@ -118,4 +129,11 @@ legend {
 .play-btn {
     align-self: flex-start;
     padding: .75rem 1.5rem;
+
+.game-output {
+    display: flex;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: .1rem;
+    justify-content: center;
 }
