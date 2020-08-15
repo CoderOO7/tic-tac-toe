@@ -124,6 +124,30 @@ const displayController = (function(doc) {
     let gameSettings = {};
 
     /**
+     * Control the second player's name input based on opponent selection.
+     */
+    function _handleOpponentChange() {
+        if (this.id === 'computer') {
+            nameInputTwo.value = 'Computer';
+            nameInputTwo.setAttribute('readonly', '');
+        } else {
+            nameInputTwo.value = 'Player 2';
+            nameInputTwo.removeAttribute('readonly');
+        }
+    }
+
+    /**
+     * Add event listeners for when the selected opponent input changes.
+     */
+    function _detectOpponentChanges() {
+        const opponentInputs = [opponentInputOne, opponentInputTwo];
+        opponentInputs.forEach(opponent => {
+            const func = _handleOpponentChange.bind(opponent);
+            opponent.addEventListener('input', func, false);
+        });
+    }
+
+    /**
      * Assign the gameSettings object based on form submitted inputs.
      */
     function _setGameSettings() {
@@ -199,6 +223,8 @@ const displayController = (function(doc) {
         // Set initial values for player's names
         nameInputOne.value = 'Player 1';
         nameInputTwo.value = 'Player 2';
+        // Change player 2's name based on opponent input changes.
+        _detectOpponentChanges();
         // Function called when form submitted.
         form.addEventListener('submit', _activateGame, false);
     })();
@@ -218,6 +244,7 @@ const displayController = (function(doc) {
 const gameController = (function() {
 
     const boardElement = displayController.board;
+    let computerOpponent = false;
     let playerOne;
     let playerTwo;
     let gameWinner;
@@ -301,6 +328,7 @@ const gameController = (function() {
         playerOne = null;
         playerTwo = null;
         gameWinner = null;
+        computerOpponent = false;
     }
 
     /**
@@ -320,6 +348,20 @@ const gameController = (function() {
     }
 
     /**
+     * Generate a random play on the gameboard made by the computer.
+     */
+    function _executeComputerPlay() {
+        const boardArrayLen = gameBoard.get().length;
+        let randIndex;
+        let isUpdated;
+        do {
+            randIndex = Math.floor(Math.random() * boardArrayLen);
+            isUpdated = gameBoard.update(randIndex, playerTwo.marker);
+        } while (!isUpdated);
+        displayController.render();
+    }
+
+    /**
      * Update the gameboard after a player makes their move.
      * @param {Object} player       - Player object who just played.
      * @param {Object} cellIndex    - Cell's index number in the gameboard.
@@ -330,8 +372,10 @@ const gameController = (function() {
             displayController.render();
             if (_isGameOver()) {
                 _endGame();
-            } else {
+            } else if (!computerOpponent) {
                 _changeTurns();
+            } else if (computerOpponent) {
+                _executeComputerPlay();
             }
         }
     }
@@ -344,6 +388,9 @@ const gameController = (function() {
         if (Object.keys(gameSettings).length) {
             playerOne = playerFactory(gameSettings.playerOneName, 'X', true);
             playerTwo = playerFactory(gameSettings.playerTwoName, 'O', false);
+            if (gameSettings.opponent === 'computer') {
+                computerOpponent = true;
+            }
         }
     }
 
