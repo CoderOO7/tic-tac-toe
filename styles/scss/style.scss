@@ -1,9 +1,21 @@
-// VARIABLES
+// GRID VARIABLES
 $num-board-col: 3;
 $num-board-row: 3;
-$cell-size: 9rem;
+$cell-size: 12rem;
+
+// COLOR VARIABLES
+$color-primary: #303F9F;
+$color-primary-med: #7986CB;
+$color-primary-light: #C5CAE9;
+$color-secondary: #0B132B;
+$color-black: #000;
+$color-white: #FFF;
+$color-grey: #D9D9D9;
+$color-grey-dark: #303336;
 
 // MIXINS
+
+// Initialize each area in the board with corresponding row, column.
 @mixin set-grid-areas() {
     $counter: 1;
     @for $row from 1 through $num-board-row {
@@ -17,21 +29,43 @@ $cell-size: 9rem;
     }
 }
 
-body {
-    font-family: sans-serif;
-    font-size: 1.6rem;
+// Change appearance of inputs when disabled.
+@mixin disabled-input() {
+    background-color: $color-grey;
+    color: rgba($color-black, .5);
 }
 
-fieldset { margin-bottom: 2rem; }
+html {
+    background-color: $color-secondary;
+    color: $color-white;
+}
+
+body {
+    font-family: 'Palanquin', sans-serif;
+    font-size: 1.8rem;
+}
+
+h1 {
+    font: 400 4.5rem 'Kreon', serif;
+    letter-spacing: .2rem;
+    margin: 3rem 0 4rem;
+    text-align: center;
+    text-shadow: .5rem .3rem .2rem $color-primary;
+}
+
+fieldset { margin-bottom: 3.75rem; }
 
 legend {
-    font-size: 1.8rem;
-    margin-bottom: .75rem;
+    border-bottom: .1rem solid $color-primary;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: .75rem;
 }
 
 .container {
     display: flex;
     justify-content: center;
+    margin-bottom: 3.5rem;
 }
 
 .board {
@@ -65,7 +99,6 @@ legend {
 .opponent {
     &__box {
         display: inline-block;
-
         &:not(:last-child) { margin-right: 1rem; }
     }
 }
