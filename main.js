@@ -149,12 +149,12 @@ const displayController = (function(doc) {
     }
 
     /**
-     * Remove all child nodes from a gameboard cell element.
-     * @param {Object} cell - A gameboard cell element on the webpage.
+     * Remove all child elements from a node in the document.
+     * @param {Object} node - A node on the webpage.
      */
-    function _removeChildren(cell) {
-        while (cell.firstChild) {
-            cell.removeChild(cell.firstChild);
+    function _removeChildren(node) {
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
         }
     }
 
@@ -183,6 +183,18 @@ const displayController = (function(doc) {
         });
     }
 
+    /**
+     * Display the game's result (win/tie).
+     * @param {(Object|undefined)} gameWinner - Player who won or undefined.
+     */
+    function showResult(gameWinner) {
+        const gameResult = doc.querySelector('.game-result');
+        const displayStr = (gameWinner) ? 
+            `${gameWinner.name} has won the game!` : 'The game has been tied.';
+        _removeChildren(gameResult);
+        gameResult.insertAdjacentText('beforeend', displayStr);
+    }
+
     (function() {
         // Set initial values for player's names
         nameInputOne.value = 'Player 1';
@@ -196,7 +208,8 @@ const displayController = (function(doc) {
         getGameSettings,
         resetGameSettings,
         toggleActiveInputs,
-        render
+        render,
+        showResult
     };
 
 })(document);
@@ -282,15 +295,22 @@ const gameController = (function() {
     }
 
     /**
-     * Display the game winner and reset the game's settings.
+     * Reset this module's variables to initial values.
      */
-    function _endGame() {
-        // Assign playerOne and playerTwo variables 'null'.
+    function _resetPlayers() {
         playerOne = null;
         playerTwo = null;
         gameWinner = null;
-        // TODO: Display congratulations message to winner.
+    }
 
+    /**
+     * Display the game winner and reset the game's settings.
+     */
+    function _endGame() {
+        // Display message for game's result.
+        displayController.showResult(gameWinner);
+        // Reset gameController module variables.
+        _resetPlayers();
         // Reset the gameSettings object.
         displayController.resetGameSettings();
         // Enable form inputs to start a new game.
@@ -320,7 +340,7 @@ const gameController = (function() {
      * Assign player objects if the game settings have been created.
      */
     function _assignPlayers() {
-        const gameSettings = displayController.getGameSettings(); 
+        const gameSettings = displayController.getGameSettings();
         if (Object.keys(gameSettings).length) {
             playerOne = playerFactory(gameSettings.playerOneName, 'X', true);
             playerTwo = playerFactory(gameSettings.playerTwoName, 'O', false);
