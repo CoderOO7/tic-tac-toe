@@ -121,7 +121,18 @@ const displayController = (function(doc) {
     const opponentInputOne = doc.getElementById('player');
     const opponentInputTwo = doc.getElementById('computer');
     const form = doc.querySelector('.form');
+    const gameOutput = doc.querySelector('.game-output');
     let gameSettings = {};
+
+    /**
+     * Remove all child elements from a node in the document.
+     * @param {Object} node - A node on the webpage.
+     */
+    function _removeChildren(node) {
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    }
 
     /**
      * Control the second player's name input based on opponent selection.
@@ -158,28 +169,28 @@ const displayController = (function(doc) {
     }
 
     /**
-     * Start a new game by resetting the gameboard, disabling the form and
-     * saving the form's input values.
+     * Clear the current message displayed.
+     */
+    function _clearMessage() {
+        _removeChildren(gameOutput);
+        gameOutput.insertAdjacentHTML('beforeend', '&nbsp;');
+    }
+
+    /**
+     * Start a new game clearing the previous game's output, disabling the form,
+     * and saving the form's input values.
      * @param {Object} event - 'Submit' event causing the form's submission.
      */
     function _activateGame(event) {
         event.preventDefault();
-        // Show the new gameboard
+        // Show the new gameboard after it's been cleared.
         render();
+        // Clear game result of previous game.
+        _clearMessage();
         // Disable the form's input values.
         toggleActiveInputs();
         // Save input values inside gameSettings object
         _setGameSettings();
-    }
-
-    /**
-     * Remove all child elements from a node in the document.
-     * @param {Object} node - A node on the webpage.
-     */
-    function _removeChildren(node) {
-        while (node.firstChild) {
-            node.removeChild(node.firstChild);
-        }
     }
 
     const getGameSettings = () => gameSettings;
@@ -208,15 +219,12 @@ const displayController = (function(doc) {
     }
 
     /**
-     * Display the game's result (win/tie).
-     * @param {(Object|undefined)} gameWinner - Player who won or undefined.
+     * Display messages for errors, or for end-of-game results (win/tie).
+     * @param {string} outputString - String to display on screen.
      */
-    function showResult(gameWinner) {
-        const gameResult = doc.querySelector('.game-result');
-        const displayStr = (gameWinner) ? 
-            `${gameWinner.name} has won the game!` : 'The game has been tied.';
-        _removeChildren(gameResult);
-        gameResult.insertAdjacentText('beforeend', displayStr);
+    function showMessage(outputString) {
+        _removeChildren(gameOutput);
+        gameOutput.insertAdjacentText('beforeend', outputString);
     }
 
     (function() {
@@ -235,7 +243,7 @@ const displayController = (function(doc) {
         resetGameSettings,
         toggleActiveInputs,
         render,
-        showResult
+        showMessage
     };
 
 })(document);
@@ -336,7 +344,9 @@ const gameController = (function() {
      */
     function _endGame() {
         // Display message for game's result.
-        displayController.showResult(gameWinner);
+        let gameResult = (gameWinner) ? `${gameWinner.name} wins` : 'Tie Game';
+        gameResult = gameResult.toUpperCase();
+        displayController.showMessage(gameResult);
         // Reset gameController module variables.
         _resetPlayers();
         // Reset the gameSettings object.
