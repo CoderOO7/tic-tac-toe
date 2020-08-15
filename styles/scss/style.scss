@@ -112,23 +112,69 @@ legend {
         display: inline-block;
         &:not(:last-child) { margin-right: 1rem; }
     }
+
+    &__input { display: none; }
+
+    &__input:checked + &__label {
+        background-color: darken($color-primary, 15);
+        color: $color-white;
+    }
+
+    &__input:not(:checked):disabled + &__label { @include disabled-input(); }
+
+    &__label {
+        background-color: $color-grey;
+        color: $color-primary;
+        border-radius: 2rem;
+        box-shadow: .2rem .2rem 1rem $color-black;
+        padding: .5rem 1.75rem;
+        transition: all .3s;
+
+        &:hover {
+            background-color: $color-primary;
+            color: $color-white;
+        }
+    }
 }
 
 .names {
     &__label {
+        border: .1rem solid $color-primary;
+        border-radius: .3rem;
         display: inline-block;
         margin-right: 1rem;
-        width: 10rem;
+        padding: .5rem 1rem;
+        width: 9rem;
     }
 
-    &__box + &__box { margin-top: .5rem; }
+    &__box + &__box { margin-top: 1rem; }
 
-    &__input { width: 10rem; }
+    &__input {
+        background-color: $color-grey;
+        padding: .5rem 1rem;
+        width: 10rem;
+
+        &:disabled { @include disabled-input(); }
+    }
 }
 
 .play-btn {
     align-self: flex-start;
+    background-color: $color-grey;
+    border-radius: .5rem;
     padding: .75rem 1.5rem;
+    transition: transform .2s;
+
+    &:hover {
+        cursor: pointer;
+        transform: translateY(-.5rem);
+    }
+
+    &:disabled {
+        @include disabled-input();
+        transform: none;
+    }
+}
 
 .game-output {
     display: flex;
